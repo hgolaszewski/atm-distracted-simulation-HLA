@@ -1,0 +1,233 @@
+ERROR [main] portico.lrc: federation exists: ATMFederation
+org.portico.lrc.compat.JFederationExecutionAlreadyExists: federation exists: ATMFederation
+	at org.portico.bindings.jgroups.LrcConnection.createFederation(LrcConnection.java:163)
+	at org.portico.lrc.services.federation.handlers.outgoing.CreateFederationHandler.process(CreateFederationHandler.java:74)
+	at org.portico.utils.messaging.MessageSink.process(MessageSink.java:187)
+	at org.portico.impl.hla13.Impl13Helper.processMessage(Impl13Helper.java:123)
+	at org.portico.impl.hla13.Rti13Ambassador.processMessage(Rti13Ambassador.java:5822)
+	at org.portico.impl.hla13.Rti13Ambassador.createFederationExecution(Rti13Ambassador.java:194)
+	at hla.atm.service.ProducerFederate.runFederate(ProducerFederate.java:23)
+	at hla.atm.service.ProducerFederate.main(ProducerFederate.java:108)
+ERROR [main] portico.lrc: FAILURE Register sync point [ATM_FEDERATION_SYNC_POINT] by [ServiceFederate]: already announced
+ERROR [main] portico.lrc: federation exists: ATMFederation
+org.portico.lrc.compat.JFederationExecutionAlreadyExists: federation exists: ATMFederation
+	at org.portico.bindings.jgroups.LrcConnection.createFederation(LrcConnection.java:163)
+	at org.portico.lrc.services.federation.handlers.outgoing.CreateFederationHandler.process(CreateFederationHandler.java:74)
+	at org.portico.utils.messaging.MessageSink.process(MessageSink.java:187)
+	at org.portico.impl.hla13.Impl13Helper.processMessage(Impl13Helper.java:123)
+	at org.portico.impl.hla13.Rti13Ambassador.processMessage(Rti13Ambassador.java:5822)
+	at org.portico.impl.hla13.Rti13Ambassador.createFederationExecution(Rti13Ambassador.java:194)
+	at hla.atm.client.ConsumerFederate.runFederate(ConsumerFederate.java:23)
+	at hla.atm.client.ConsumerFederate.main(ConsumerFederate.java:107)
+ERROR [main] portico.lrc: FAILURE Regiser sync point [ATM_FEDERATION_SYNC_POINT] by [ClientFederate]: already registered
+ERROR [main] portico.lrc: FAILURE Register sync point [ATM_FEDERATION_SYNC_POINT] by [ClientFederate]: label already registered
+ERROR [main] portico.lrc: federation exists: ATMFederation
+org.portico.lrc.compat.JFederationExecutionAlreadyExists: federation exists: ATMFederation
+	at org.portico.bindings.jgroups.LrcConnection.createFederation(LrcConnection.java:163)
+	at org.portico.lrc.services.federation.handlers.outgoing.CreateFederationHandler.process(CreateFederationHandler.java:74)
+	at org.portico.utils.messaging.MessageSink.process(MessageSink.java:187)
+	at org.portico.impl.hla13.Impl13Helper.processMessage(Impl13Helper.java:123)
+	at org.portico.impl.hla13.Rti13Ambassador.processMessage(Rti13Ambassador.java:5822)
+	at org.portico.impl.hla13.Rti13Ambassador.createFederationExecution(Rti13Ambassador.java:194)
+	at hla.atm.cashmachine.StorageFederate.runFederate(StorageFederate.java:23)
+	at hla.atm.cashmachine.StorageFederate.main(StorageFederate.java:127)
+ERROR [main] portico.lrc: FAILURE Regiser sync point [ATM_FEDERATION_SYNC_POINT] by [CashMachineFederate]: already registered
+ERROR [main] portico.lrc: FAILURE Register sync point [ATM_FEDERATION_SYNC_POINT] by [CashMachineFederate]: label already registered
+ERROR [main] portico.lrc: federation exists: ATMFederation
+org.portico.lrc.compat.JFederationExecutionAlreadyExists: federation exists: ATMFederation
+	at org.portico.bindings.jgroups.LrcConnection.createFederation(LrcConnection.java:163)
+	at org.portico.lrc.services.federation.handlers.outgoing.CreateFederationHandler.process(CreateFederationHandler.java:74)
+	at org.portico.utils.messaging.MessageSink.process(MessageSink.java:187)
+	at org.portico.impl.hla13.Impl13Helper.processMessage(Impl13Helper.java:123)
+	at org.portico.impl.hla13.Rti13Ambassador.processMessage(Rti13Ambassador.java:5822)
+	at org.portico.impl.hla13.Rti13Ambassador.createFederationExecution(Rti13Ambassador.java:194)
+	at hla.atm.service.ProducerFederate.runFederate(ProducerFederate.java:23)
+	at hla.atm.service.ProducerFederate.main(ProducerFederate.java:109)
+ERROR [main] portico.lrc: FAILURE Regiser sync point [ATM_FEDERATION_SYNC_POINT] by [ServiceFederate]: already registered
+ERROR [main] portico.lrc: FAILURE Register sync point [ATM_FEDERATION_SYNC_POINT] by [ServiceFederate]: label already registered
+ERROR [main] portico.lrc: federation exists: ATMFederation
+org.portico.lrc.compat.JFederationExecutionAlreadyExists: federation exists: ATMFederation
+	at org.portico.bindings.jgroups.LrcConnection.createFederation(LrcConnection.java:163)
+	at org.portico.lrc.services.federation.handlers.outgoing.CreateFederationHandler.process(CreateFederationHandler.java:74)
+	at org.portico.utils.messaging.MessageSink.process(MessageSink.java:187)
+	at org.portico.impl.hla13.Impl13Helper.processMessage(Impl13Helper.java:123)
+	at org.portico.impl.hla13.Rti13Ambassador.processMessage(Rti13Ambassador.java:5822)
+	at org.portico.impl.hla13.Rti13Ambassador.createFederationExecution(Rti13Ambassador.java:194)
+	at hla.atm.cashmachine.StorageFederate.runFederate(StorageFederate.java:23)
+	at hla.atm.cashmachine.StorageFederate.main(StorageFederate.java:127)
+ERROR [main] portico.lrc: FAILURE Regiser sync point [ATM_FEDERATION_SYNC_POINT] by [CashMachineFederate]: already registered
+ERROR [main] portico.lrc: FAILURE Register sync point [ATM_FEDERATION_SYNC_POINT] by [CashMachineFederate]: label already registered
+ERROR [main] portico.lrc: federation exists: ATMFederation
+org.portico.lrc.compat.JFederationExecutionAlreadyExists: federation exists: ATMFederation
+	at org.portico.bindings.jgroups.LrcConnection.createFederation(LrcConnection.java:163)
+	at org.portico.lrc.services.federation.handlers.outgoing.CreateFederationHandler.process(CreateFederationHandler.java:74)
+	at org.portico.utils.messaging.MessageSink.process(MessageSink.java:187)
+	at org.portico.impl.hla13.Impl13Helper.processMessage(Impl13Helper.java:123)
+	at org.portico.impl.hla13.Rti13Ambassador.processMessage(Rti13Ambassador.java:5822)
+	at org.portico.impl.hla13.Rti13Ambassador.createFederationExecution(Rti13Ambassador.java:194)
+	at hla.atm.service.ProducerFederate.runFederate(ProducerFederate.java:27)
+	at hla.atm.service.ProducerFederate.main(ProducerFederate.java:114)
+ERROR [main] portico.lrc: FAILURE Regiser sync point [ATM_FEDERATION_SYNC_POINT] by [ServiceFederate]: already registered
+ERROR [main] portico.lrc: FAILURE Register sync point [ATM_FEDERATION_SYNC_POINT] by [ServiceFederate]: label already registered
+ERROR [main] portico.lrc: federation exists: ATMFederation
+org.portico.lrc.compat.JFederationExecutionAlreadyExists: federation exists: ATMFederation
+	at org.portico.bindings.jgroups.LrcConnection.createFederation(LrcConnection.java:163)
+	at org.portico.lrc.services.federation.handlers.outgoing.CreateFederationHandler.process(CreateFederationHandler.java:74)
+	at org.portico.utils.messaging.MessageSink.process(MessageSink.java:187)
+	at org.portico.impl.hla13.Impl13Helper.processMessage(Impl13Helper.java:123)
+	at org.portico.impl.hla13.Rti13Ambassador.processMessage(Rti13Ambassador.java:5822)
+	at org.portico.impl.hla13.Rti13Ambassador.createFederationExecution(Rti13Ambassador.java:194)
+	at hla.atm.client.ConsumerFederate.runFederate(ConsumerFederate.java:23)
+	at hla.atm.client.ConsumerFederate.main(ConsumerFederate.java:107)
+ERROR [main] portico.lrc: FAILURE Regiser sync point [ATM_FEDERATION_SYNC_POINT] by [ClientFederate]: already registered
+ERROR [main] portico.lrc: FAILURE Register sync point [ATM_FEDERATION_SYNC_POINT] by [ClientFederate]: label already registered
+ERROR [main] portico.lrc: federation exists: ATMFederation
+org.portico.lrc.compat.JFederationExecutionAlreadyExists: federation exists: ATMFederation
+	at org.portico.bindings.jgroups.LrcConnection.createFederation(LrcConnection.java:163)
+	at org.portico.lrc.services.federation.handlers.outgoing.CreateFederationHandler.process(CreateFederationHandler.java:74)
+	at org.portico.utils.messaging.MessageSink.process(MessageSink.java:187)
+	at org.portico.impl.hla13.Impl13Helper.processMessage(Impl13Helper.java:123)
+	at org.portico.impl.hla13.Rti13Ambassador.processMessage(Rti13Ambassador.java:5822)
+	at org.portico.impl.hla13.Rti13Ambassador.createFederationExecution(Rti13Ambassador.java:194)
+	at hla.atm.cashmachine.StorageFederate.runFederate(StorageFederate.java:23)
+	at hla.atm.cashmachine.StorageFederate.main(StorageFederate.java:127)
+ERROR [main] portico.lrc: FAILURE Regiser sync point [ATM_FEDERATION_SYNC_POINT] by [CashMachineFederate]: already registered
+ERROR [main] portico.lrc: FAILURE Register sync point [ATM_FEDERATION_SYNC_POINT] by [CashMachineFederate]: label already registered
+ERROR [main] portico.lrc: federation exists: ATMFederation
+org.portico.lrc.compat.JFederationExecutionAlreadyExists: federation exists: ATMFederation
+	at org.portico.bindings.jgroups.LrcConnection.createFederation(LrcConnection.java:163)
+	at org.portico.lrc.services.federation.handlers.outgoing.CreateFederationHandler.process(CreateFederationHandler.java:74)
+	at org.portico.utils.messaging.MessageSink.process(MessageSink.java:187)
+	at org.portico.impl.hla13.Impl13Helper.processMessage(Impl13Helper.java:123)
+	at org.portico.impl.hla13.Rti13Ambassador.processMessage(Rti13Ambassador.java:5822)
+	at org.portico.impl.hla13.Rti13Ambassador.createFederationExecution(Rti13Ambassador.java:194)
+	at hla.atm.service.ProducerFederate.runFederate(ProducerFederate.java:27)
+	at hla.atm.service.ProducerFederate.main(ProducerFederate.java:114)
+ERROR [main] portico.lrc: federate name in use: ServiceFederate
+org.portico.lrc.compat.JFederateAlreadyExecutionMember: federate name in use: ServiceFederate
+	at org.portico.bindings.jgroups.LrcConnection.joinFederation(LrcConnection.java:260)
+	at org.portico.lrc.services.federation.handlers.outgoing.JoinFederationHandler.process(JoinFederationHandler.java:92)
+	at org.portico.utils.messaging.MessageSink.process(MessageSink.java:187)
+	at org.portico.impl.hla13.Impl13Helper.processMessage(Impl13Helper.java:123)
+	at org.portico.impl.hla13.Rti13Ambassador.processMessage(Rti13Ambassador.java:5822)
+	at org.portico.impl.hla13.Rti13Ambassador.joinFederationExecution(Rti13Ambassador.java:321)
+	at hla.atm.service.ProducerFederate.runFederate(ProducerFederate.java:38)
+	at hla.atm.service.ProducerFederate.main(ProducerFederate.java:114)
+ERROR [main] portico.lrc: federation exists: ATMFederation
+org.portico.lrc.compat.JFederationExecutionAlreadyExists: federation exists: ATMFederation
+	at org.portico.bindings.jgroups.LrcConnection.createFederation(LrcConnection.java:163)
+	at org.portico.lrc.services.federation.handlers.outgoing.CreateFederationHandler.process(CreateFederationHandler.java:74)
+	at org.portico.utils.messaging.MessageSink.process(MessageSink.java:187)
+	at org.portico.impl.hla13.Impl13Helper.processMessage(Impl13Helper.java:123)
+	at org.portico.impl.hla13.Rti13Ambassador.processMessage(Rti13Ambassador.java:5822)
+	at org.portico.impl.hla13.Rti13Ambassador.createFederationExecution(Rti13Ambassador.java:194)
+	at hla.atm.cashmachine.StorageFederate.runFederate(StorageFederate.java:23)
+	at hla.atm.cashmachine.StorageFederate.main(StorageFederate.java:127)
+ERROR [main] portico.lrc: FAILURE Regiser sync point [ATM_FEDERATION_SYNC_POINT] by [CashMachineFederate]: already registered
+ERROR [main] portico.lrc: FAILURE Register sync point [ATM_FEDERATION_SYNC_POINT] by [CashMachineFederate]: label already registered
+ERROR [main] portico.lrc: federation exists: ATMFederation
+org.portico.lrc.compat.JFederationExecutionAlreadyExists: federation exists: ATMFederation
+	at org.portico.bindings.jgroups.LrcConnection.createFederation(LrcConnection.java:163)
+	at org.portico.lrc.services.federation.handlers.outgoing.CreateFederationHandler.process(CreateFederationHandler.java:74)
+	at org.portico.utils.messaging.MessageSink.process(MessageSink.java:187)
+	at org.portico.impl.hla13.Impl13Helper.processMessage(Impl13Helper.java:123)
+	at org.portico.impl.hla13.Rti13Ambassador.processMessage(Rti13Ambassador.java:5822)
+	at org.portico.impl.hla13.Rti13Ambassador.createFederationExecution(Rti13Ambassador.java:194)
+	at hla.atm.client.ConsumerFederate.runFederate(ConsumerFederate.java:23)
+	at hla.atm.client.ConsumerFederate.main(ConsumerFederate.java:107)
+ERROR [main] portico.lrc: FAILURE Regiser sync point [ATM_FEDERATION_SYNC_POINT] by [ClientFederate]: already registered
+ERROR [main] portico.lrc: FAILURE Register sync point [ATM_FEDERATION_SYNC_POINT] by [ClientFederate]: label already registered
+ERROR [main] portico.lrc: federation exists: ATMFederation
+org.portico.lrc.compat.JFederationExecutionAlreadyExists: federation exists: ATMFederation
+	at org.portico.bindings.jgroups.LrcConnection.createFederation(LrcConnection.java:163)
+	at org.portico.lrc.services.federation.handlers.outgoing.CreateFederationHandler.process(CreateFederationHandler.java:74)
+	at org.portico.utils.messaging.MessageSink.process(MessageSink.java:187)
+	at org.portico.impl.hla13.Impl13Helper.processMessage(Impl13Helper.java:123)
+	at org.portico.impl.hla13.Rti13Ambassador.processMessage(Rti13Ambassador.java:5822)
+	at org.portico.impl.hla13.Rti13Ambassador.createFederationExecution(Rti13Ambassador.java:194)
+	at hla.atm.service.ProducerFederate.runFederate(ProducerFederate.java:36)
+	at hla.atm.service.ProducerFederate.run(ProducerFederate.java:24)
+	at java.lang.Thread.run(Thread.java:748)
+	at hla.atm.service.ProducerFederate.main(ProducerFederate.java:123)
+ERROR [main] portico.lrc: federation exists: ATMFederation
+org.portico.lrc.compat.JFederationExecutionAlreadyExists: federation exists: ATMFederation
+	at org.portico.bindings.jgroups.LrcConnection.createFederation(LrcConnection.java:163)
+	at org.portico.lrc.services.federation.handlers.outgoing.CreateFederationHandler.process(CreateFederationHandler.java:74)
+	at org.portico.utils.messaging.MessageSink.process(MessageSink.java:187)
+	at org.portico.impl.hla13.Impl13Helper.processMessage(Impl13Helper.java:123)
+	at org.portico.impl.hla13.Rti13Ambassador.processMessage(Rti13Ambassador.java:5822)
+	at org.portico.impl.hla13.Rti13Ambassador.createFederationExecution(Rti13Ambassador.java:194)
+	at hla.atm.cashmachine.StorageFederate.runFederate(StorageFederate.java:23)
+	at hla.atm.cashmachine.StorageFederate.main(StorageFederate.java:127)
+ERROR [main] portico.lrc: FAILURE Regiser sync point [ATM_FEDERATION_SYNC_POINT] by [CashMachineFederate]: already registered
+ERROR [main] portico.lrc: FAILURE Register sync point [ATM_FEDERATION_SYNC_POINT] by [CashMachineFederate]: label already registered
+ERROR [main] portico.lrc: federation exists: ATMFederation
+org.portico.lrc.compat.JFederationExecutionAlreadyExists: federation exists: ATMFederation
+	at org.portico.bindings.jgroups.LrcConnection.createFederation(LrcConnection.java:163)
+	at org.portico.lrc.services.federation.handlers.outgoing.CreateFederationHandler.process(CreateFederationHandler.java:74)
+	at org.portico.utils.messaging.MessageSink.process(MessageSink.java:187)
+	at org.portico.impl.hla13.Impl13Helper.processMessage(Impl13Helper.java:123)
+	at org.portico.impl.hla13.Rti13Ambassador.processMessage(Rti13Ambassador.java:5822)
+	at org.portico.impl.hla13.Rti13Ambassador.createFederationExecution(Rti13Ambassador.java:194)
+	at hla.atm.client.ConsumerFederate.runFederate(ConsumerFederate.java:23)
+	at hla.atm.client.ConsumerFederate.main(ConsumerFederate.java:107)
+ERROR [main] portico.lrc: FAILURE Regiser sync point [ATM_FEDERATION_SYNC_POINT] by [ClientFederate]: already registered
+ERROR [main] portico.lrc: FAILURE Register sync point [ATM_FEDERATION_SYNC_POINT] by [ClientFederate]: label already registered
+ERROR [Thread-0] portico.lrc: federation exists: ATMFederation
+org.portico.lrc.compat.JFederationExecutionAlreadyExists: federation exists: ATMFederation
+	at org.portico.bindings.jgroups.LrcConnection.createFederation(LrcConnection.java:163)
+	at org.portico.lrc.services.federation.handlers.outgoing.CreateFederationHandler.process(CreateFederationHandler.java:74)
+	at org.portico.utils.messaging.MessageSink.process(MessageSink.java:187)
+	at org.portico.impl.hla13.Impl13Helper.processMessage(Impl13Helper.java:123)
+	at org.portico.impl.hla13.Rti13Ambassador.processMessage(Rti13Ambassador.java:5822)
+	at org.portico.impl.hla13.Rti13Ambassador.createFederationExecution(Rti13Ambassador.java:194)
+	at hla.atm.service.ProducerFederate.runFederate(ProducerFederate.java:36)
+	at hla.atm.service.ProducerFederate.run(ProducerFederate.java:24)
+	at java.lang.Thread.run(Thread.java:748)
+ERROR [Thread-0] portico.lrc: federate name in use: ServiceFederate
+org.portico.lrc.compat.JFederateAlreadyExecutionMember: federate name in use: ServiceFederate
+	at org.portico.bindings.jgroups.LrcConnection.joinFederation(LrcConnection.java:260)
+	at org.portico.lrc.services.federation.handlers.outgoing.JoinFederationHandler.process(JoinFederationHandler.java:92)
+	at org.portico.utils.messaging.MessageSink.process(MessageSink.java:187)
+	at org.portico.impl.hla13.Impl13Helper.processMessage(Impl13Helper.java:123)
+	at org.portico.impl.hla13.Rti13Ambassador.processMessage(Rti13Ambassador.java:5822)
+	at org.portico.impl.hla13.Rti13Ambassador.joinFederationExecution(Rti13Ambassador.java:321)
+	at hla.atm.service.ProducerFederate.runFederate(ProducerFederate.java:47)
+	at hla.atm.service.ProducerFederate.run(ProducerFederate.java:24)
+	at java.lang.Thread.run(Thread.java:748)
+ERROR [Thread-0] portico.lrc: federation exists: ATMFederation
+org.portico.lrc.compat.JFederationExecutionAlreadyExists: federation exists: ATMFederation
+	at org.portico.bindings.jgroups.LrcConnection.createFederation(LrcConnection.java:163)
+	at org.portico.lrc.services.federation.handlers.outgoing.CreateFederationHandler.process(CreateFederationHandler.java:74)
+	at org.portico.utils.messaging.MessageSink.process(MessageSink.java:187)
+	at org.portico.impl.hla13.Impl13Helper.processMessage(Impl13Helper.java:123)
+	at org.portico.impl.hla13.Rti13Ambassador.processMessage(Rti13Ambassador.java:5822)
+	at org.portico.impl.hla13.Rti13Ambassador.createFederationExecution(Rti13Ambassador.java:194)
+	at hla.atm.service.ProducerFederate.runFederate(ProducerFederate.java:36)
+	at hla.atm.service.ProducerFederate.run(ProducerFederate.java:24)
+	at java.lang.Thread.run(Thread.java:748)
+ERROR [Thread-0] portico.lrc: FAILURE Register sync point [ATM_FEDERATION_SYNC_POINT] by [ServiceFederate2]: already announced
+ERROR [main] portico.lrc: federation exists: ATMFederation
+org.portico.lrc.compat.JFederationExecutionAlreadyExists: federation exists: ATMFederation
+	at org.portico.bindings.jgroups.LrcConnection.createFederation(LrcConnection.java:163)
+	at org.portico.lrc.services.federation.handlers.outgoing.CreateFederationHandler.process(CreateFederationHandler.java:74)
+	at org.portico.utils.messaging.MessageSink.process(MessageSink.java:187)
+	at org.portico.impl.hla13.Impl13Helper.processMessage(Impl13Helper.java:123)
+	at org.portico.impl.hla13.Rti13Ambassador.processMessage(Rti13Ambassador.java:5822)
+	at org.portico.impl.hla13.Rti13Ambassador.createFederationExecution(Rti13Ambassador.java:194)
+	at hla.atm.client.ConsumerFederate.runFederate(ConsumerFederate.java:23)
+	at hla.atm.client.ConsumerFederate.main(ConsumerFederate.java:107)
+ERROR [main] portico.lrc: FAILURE Regiser sync point [ATM_FEDERATION_SYNC_POINT] by [ClientFederate]: already registered
+ERROR [main] portico.lrc: FAILURE Register sync point [ATM_FEDERATION_SYNC_POINT] by [ClientFederate]: label already registered
+ERROR [main] portico.lrc: federation exists: ATMFederation
+org.portico.lrc.compat.JFederationExecutionAlreadyExists: federation exists: ATMFederation
+	at org.portico.bindings.jgroups.LrcConnection.createFederation(LrcConnection.java:163)
+	at org.portico.lrc.services.federation.handlers.outgoing.CreateFederationHandler.process(CreateFederationHandler.java:74)
+	at org.portico.utils.messaging.MessageSink.process(MessageSink.java:187)
+	at org.portico.impl.hla13.Impl13Helper.processMessage(Impl13Helper.java:123)
+	at org.portico.impl.hla13.Rti13Ambassador.processMessage(Rti13Ambassador.java:5822)
+	at org.portico.impl.hla13.Rti13Ambassador.createFederationExecution(Rti13Ambassador.java:194)
+	at hla.atm.cashmachine.StorageFederate.runFederate(StorageFederate.java:23)
+	at hla.atm.cashmachine.StorageFederate.main(StorageFederate.java:127)
+ERROR [main] portico.lrc: FAILURE Regiser sync point [ATM_FEDERATION_SYNC_POINT] by [CashMachineFederate]: already registered
+ERROR [main] portico.lrc: FAILURE Register sync point [ATM_FEDERATION_SYNC_POINT] by [CashMachineFederate]: label already registered
