@@ -11,7 +11,22 @@ import org.portico.impl.hla13.types.DoubleTimeInterval;
 
 public class Utils {
 
-	public static final String SYNC_POINT = "ATM_FEDERATION_SYNC_POINT";
+	public static final String CASH_MACHINE_AMBASSADOR_NAME = "CashMachineFederateAmbassador";
+	public static final String CASH_MACHINE_FEDERATE_NAME = "CashMachineFederate";
+
+	public static final String CLIENT_AMBASSADOR_NAME = "ClientFederateAmbassador";
+	public static final String CLIENT_FEDERATE_NAME = "ClientFederate";
+
+	public static final String GUI_AMBASSADOR_NAME = "GuiFederateAmbassador";
+	public static final String GUI_FEDERATE_NAME = "GuiFederate";
+
+	public static final String QUEUE_AMBASSADOR_NAME = "QueueFederateAmbassador";
+	public static final String QUEUE_FEDERATE_NAME = "QueueFederate";
+
+	public static final String SERVICE_AMBASSADOR_NAME = "ServiceFederateAmbassador";
+	public static final String SERVICE_FEDERATE_NAME = "ServiceFederate";
+
+	public static final String INT_TAG = "TAG";
 
 	public static double convertTime(LogicalTime logicalTime) {
 		return ((DoubleTime)logicalTime).getTime();
@@ -19,6 +34,10 @@ public class Utils {
 
 	public static LogicalTime convertTime(double time) {
 		return new DoubleTime(time);
+	}
+
+	public static Integer generateRandomInt(int a, int b) {
+		return new Random().nextInt(a) + b;
 	}
 
 	public static LogicalTimeInterval convertInterval(double time) {

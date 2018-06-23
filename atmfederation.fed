@@ -14,31 +14,31 @@
     (class InteractionRoot reliable timestamp
       (class RTIprivate reliable timestamp)
       (class Finish reliable timestamp)
-      (class CashRefillRequest reliable timestamp TestSpace
+      (class CASH_REFILL_REQUEST reliable timestamp TestSpace
         (parameter amount)
       )
-      (class WithdrawalRequest reliable timestamp TestSpace
+      (class WITHDRAWAL_REQUEST reliable timestamp TestSpace
         (parameter clientId)
         (parameter amount)
       )
-      (class EntryRequest reliable timestamp TestSpace
+      (class ENTRY_REQUEST reliable timestamp TestSpace
         (parameter clientId)
       )
-      (class ClientEntered reliable timestamp TestSpace
+      (class CLIENT_ENTERED reliable timestamp TestSpace
          (parameter clientId)
       )
-      (class ClientLeft reliable timestamp TestSpace
+      (class CLIENT_LEFT reliable timestamp TestSpace
          (parameter clientId)
       )
-      (class LeaveRequest reliable timestamp TestSpace
+      (class LEAVE_REQUEST reliable timestamp TestSpace
         (parameter clientId)
       )
-      (class NoCash reliable timestamp TestSpace)
-      (class QueueSizeStateResponse reliable timestamp TestSpace
+      (class NO_CASH reliable timestamp TestSpace)
+      (class QUEUE_SIZE_STATE_RESPONSE reliable timestamp TestSpace
         (parameter queueIsFull)
         (parameter clientId)
       )
-      (class TransactionStatus reliable timestamp TestSpace
+      (class TRANSACTION_STATUS reliable timestamp TestSpace
         (parameter transactionSucceed)
         (parameter clientId)
       )

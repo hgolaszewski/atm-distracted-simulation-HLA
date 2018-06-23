@@ -7,18 +7,8 @@ public class Client {
 	private static int seq = 1;
 	private int id = seq++;
 
-	private double leaveTime = 0.0;
-
 	public int getId() {
 		return id;
-	}
-
-	public double getLeaveTime() {
-		return leaveTime;
-	}
-
-	public void setLeaveTime(double leaveTime) {
-		this.leaveTime = leaveTime;
 	}
 
 	@Override
@@ -35,7 +25,7 @@ public class Client {
 
 	@Override
 	public int hashCode() {
-
 		return Objects.hash(id);
 	}
+
 }

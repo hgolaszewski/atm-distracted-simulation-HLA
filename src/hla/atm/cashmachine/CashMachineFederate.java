@@ -1,170 +1,124 @@
 package hla.atm.cashmachine;
 
 import static hla.atm.utils.Utils.*;
+import static hla.atm.commons.event.EventType.*;
 
-import hla.atm.utils.event.ExternalEvent;
+import hla.atm.commons.AbstractFederate;
+import hla.atm.commons.event.ExternalEvent;
 import hla.rti.*;
 import hla.rti.jlc.EncodingHelpers;
 import hla.rti.jlc.RtiFactoryFactory;
-
-import java.io.File;
-import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CashMachineFederate {
+class CashMachineFederate extends AbstractFederate<CashMachineAmbassador> {
 
-    private int cash = 30000;
-    private RTIambassador rtiamb;
-    private CashMachineAmbassador fedamb;
+    private int cash = 35000;
     private boolean noCashSent = false;
 
-    void runFederate() throws Exception {
-        rtiamb = RtiFactoryFactory.getRtiFactory().createRtiAmbassador();
-        fedamb = new CashMachineAmbassador();
-        tryCreateFederation();
-        tryJoinFederationAndRegisterSyncPoint();
-		waitForSynchronization("CashMachineFederate");
+	CashMachineFederate() throws RTIinternalError {
+		super(CASH_MACHINE_FEDERATE_NAME);
+		this.setRTIambassador(RtiFactoryFactory.getRtiFactory().createRtiAmbassador());
+		this.setFederateAmbassador(new CashMachineAmbassador());
+	}
 
-        rtiamb.synchronizationPointAchieved(SYNC_POINT);
-        log("CashMachineFederate: achieved sync point: " + SYNC_POINT + ", waiting for federation...");
-        while(!fedamb.isReadyToRun) {
-            rtiamb.tick();
-        }
-
-        enableTimePolicy();
+	void runFederate() throws Exception {
+        prepareFederate();
         declarePublishAndSubscribePolicy();
-
-        while (fedamb.running) {
+        while (getFederateAmbassador().isRunning()) {
             advanceTime();
-            List<ExternalEvent> eventsToDelete = new ArrayList<>();
-                for(ExternalEvent externalEvent : fedamb.externalEvents) {
-                    switch (externalEvent.getEventType()) {
-                        case CASH_REFILL_REQUEST:
-                            this.addCash(externalEvent.getAmount());
-                            eventsToDelete.add(externalEvent);
-                            noCashSent = false;
-                            break;
-                        case WITHDRAWAL_REQUEST:
-                            if (externalEvent.getAmount() > this.cash) {
-                                if (!noCashSent) {
-                                    sendNoCashInteraction();
-                                }
-                                noCashSent = true;
-                            } else {
-                                this.getCash(externalEvent.getAmount());
-                                sendTransactionStatusInteraction(true, externalEvent.getClientId());
-                                eventsToDelete.add(externalEvent);
-                            }
-                            break;
+            processEvents();
+            getRTIambassador().tick();
+        }
+    }
+
+    private void processEvents() {
+        List<ExternalEvent> eventsToDelete = new ArrayList<>();
+        getFederateAmbassador().getExternalEvents().forEach(externalEvent -> {
+            switch (externalEvent.getEventType()) {
+
+                case CASH_REFILL_REQUEST:
+                    addCash(externalEvent.getAmount());
+                    setNoCashSent(false);
+                    eventsToDelete.add(externalEvent);
+                    break;
+
+                case WITHDRAWAL_REQUEST:
+                    if (externalEvent.getAmount() > getCash()) {
+                        if (!isNoCashSent()) {
+                            sendNoCashInteraction();
+                        }
+                        setNoCashSent(true);
+                    } else {
+                        subtractCash(externalEvent.getAmount());
+                        sendTransactionStatusInteraction(externalEvent.getClientId());
+                        eventsToDelete.add(externalEvent);
                     }
-                }
-            fedamb.getExternalEvents().removeAll(eventsToDelete);
-            rtiamb.tick();
-        }
-    }
-
-    private void tryJoinFederationAndRegisterSyncPoint() throws FederateAlreadyExecutionMember, FederationExecutionDoesNotExist, SaveInProgress, RestoreInProgress, RTIinternalError, ConcurrentAccessAttempted, FederateNotExecutionMember {
-        rtiamb.joinFederationExecution("CashMachineFederate", "ATMFederation", fedamb);
-        log("CashMachineFederate: joined Federation as CashMachineFederate");
-
-        rtiamb.registerFederationSynchronizationPoint(SYNC_POINT, null);
-
-        while(!fedamb.isAnnounced) {
-            rtiamb.tick();
-        }
-    }
-
-    private void tryCreateFederation() throws CouldNotOpenFED, ErrorReadingFED, RTIinternalError,
-            ConcurrentAccessAttempted {
-        try {
-            File fom = new File("atmfederation.fed");
-            rtiamb.createFederationExecution("ATMFederation", fom.toURI().toURL());
-            log("CashMachineFederate: created Federation");
-        } catch(FederationExecutionAlreadyExists exists) {
-            log("CashMachineFederate: didn't create federation, it already existed");
-        } catch(MalformedURLException url) {
-            log("CashMachineFederate: exception processing fom: " + url.getMessage());
-            url.printStackTrace();
-        }
+                    break;
+            }
+        });
+        getFederateAmbassador().getExternalEvents().removeAll(eventsToDelete);
     }
 
     private void addCash(int amountToAdd) {
-        this.cash += amountToAdd;
-        log("CashMachineFederate: refilled " + amountToAdd + " at time: " + fedamb.federateTime + ". Current cash: " + this.cash);
+        setCash(getCash() + amountToAdd);
+        log(getFederateName() + ": refilled " + amountToAdd +
+                " at time: " + getFederateAmbassador().getFederateTime() + ". Current cash: " + getCash());
     }
 
-    private void getCash(int amountToGet) {
-        this.cash -= amountToGet;
-        log("CashMachineFederate: removed " + amountToGet + " at time: " + fedamb.federateTime + ". Current cash:" + " " + this.cash);
-    }
-
-    private void advanceTime() throws RTIexception {
-        fedamb.isAdvancing = true;
-        LogicalTime newTime = convertTime(fedamb.federateTime + fedamb.federateStep);
-        rtiamb.timeAdvanceRequest(newTime);
-        while (fedamb.isAdvancing) {
-            rtiamb.tick();
-        }
-    }
-
-    private void enableTimePolicy() throws RTIexception {
-        LogicalTime currentTime = convertTime(fedamb.federateTime);
-        LogicalTimeInterval lookahead = convertInterval(fedamb.federateLookahead);
-        this.rtiamb.enableTimeRegulation(currentTime, lookahead);
-        while(!fedamb.isRegulating) {
-            rtiamb.tick();
-        }
-        this.rtiamb.enableTimeConstrained();
-        while(!fedamb.isConstrained) {
-            rtiamb.tick();
-        }
+    private void subtractCash(int amountToGet) {
+	    setCash(getCash() - amountToGet);
+        log(getFederateName() + ": removed " + amountToGet +
+                " at time: " + getFederateAmbassador().getFederateTime() + ". Current cash:" + getCash());
     }
 
     private void declarePublishAndSubscribePolicy() throws RTIexception {
-        publishInteraction("TransactionStatus");
-        publishInteraction("NoCash");
-		fedamb.setWithdrawalRequestInteractionHandle(subscribeInteraction("WithdrawalRequest"));
-		fedamb.setCashRefillRequestInteractionHandle(subscribeInteraction("CashRefillRequest"));
-
+        publishInteraction(TRANSACTION_STATUS.name());
+        publishInteraction(NO_CASH.name());
+		getFederateAmbassador().setWithdrawalRequestInteractionHandle(subscribeInteraction(WITHDRAWAL_REQUEST.name()));
+		getFederateAmbassador().setCashRefillRequestInteractionHandle(subscribeInteraction(CASH_REFILL_REQUEST.name()));
     }
 
-    private void publishInteraction(String interactionName) throws RTIexception {
-        int handle = rtiamb.getInteractionClassHandle("InteractionRoot." + interactionName);
-        rtiamb.publishInteractionClass(handle);
-        log("CashMachineFederate: published interaction " + interactionName + " (" + handle + ")");
+    private void sendNoCashInteraction() {
+	    try {
+            SuppliedParameters parameters = RtiFactoryFactory.getRtiFactory().createSuppliedParameters();
+            int interactionHandle = getRTIambassador().getInteractionClassHandle("InteractionRoot." + NO_CASH.name());
+            LogicalTime time = convertTime(getFederateAmbassador().getFederateTime() + getFederateAmbassador().getFederateLookahead());
+            log(getFederateName() + ": sending " + NO_CASH.name());
+            getRTIambassador().sendInteraction(interactionHandle, parameters, INT_TAG.getBytes(), time);
+        } catch (Exception e) {
+	        e.printStackTrace();
+        }
     }
 
-    private int subscribeInteraction(String interactionName) throws RTIexception {
-        int handle = rtiamb.getInteractionClassHandle("InteractionRoot." + interactionName);
-        rtiamb.subscribeInteractionClass(handle);
-        log("CashMachineFederate: subscribed to interaction " + interactionName);
-        return handle;
+    private void sendTransactionStatusInteraction(int clientId) {
+	    try {
+            SuppliedParameters parameters = RtiFactoryFactory.getRtiFactory().createSuppliedParameters();
+            int interactionHandle = getRTIambassador().getInteractionClassHandle("InteractionRoot." + TRANSACTION_STATUS.name());
+            int clientIdHandle = getRTIambassador().getParameterHandle("clientId", interactionHandle);
+            parameters.add(clientIdHandle, EncodingHelpers.encodeInt(clientId));
+            LogicalTime time = convertTime(getFederateAmbassador().getFederateTime() + getFederateAmbassador().getFederateLookahead());
+            log(getFederateName() + ": sending " + TRANSACTION_STATUS.name() + " for clientId: " + clientId);
+            getRTIambassador().sendInteraction(interactionHandle, parameters, INT_TAG.getBytes(), time);
+        } catch (Exception e) {
+	        e.printStackTrace();
+        }
     }
 
-    private void sendNoCashInteraction() throws NameNotFound, FederateNotExecutionMember, RTIinternalError, InteractionClassNotDefined, RestoreInProgress, InteractionClassNotPublished, SaveInProgress, InvalidFederationTime, ConcurrentAccessAttempted, InteractionParameterNotDefined {
-        SuppliedParameters parameters = RtiFactoryFactory.getRtiFactory().createSuppliedParameters();
-
-        int interactionHandle = rtiamb.getInteractionClassHandle("InteractionRoot.NoCash");
-
-        LogicalTime time = convertTime(fedamb.federateTime + fedamb.federateLookahead);
-        log("CashMachineFederate: sending NoCash");
-        rtiamb.sendInteraction(interactionHandle, parameters, "tag".getBytes(), time);
+    private int getCash() {
+        return cash;
     }
 
-    private void sendTransactionStatusInteraction(boolean transactionSucceed, int clientId) throws NameNotFound, FederateNotExecutionMember, RTIinternalError, InteractionClassNotDefined, RestoreInProgress, InteractionClassNotPublished, SaveInProgress, InvalidFederationTime, ConcurrentAccessAttempted, InteractionParameterNotDefined {
-        SuppliedParameters parameters = RtiFactoryFactory.getRtiFactory().createSuppliedParameters();
+    private void setCash(int cash) {
+        this.cash = cash;
+    }
 
-        int interactionHandle = rtiamb.getInteractionClassHandle("InteractionRoot.TransactionStatus");
-        int transactionSucceedHandle = rtiamb.getParameterHandle("transactionSucceed", interactionHandle);
-        int clientIdHandle = rtiamb.getParameterHandle("clientId", interactionHandle);
+    private boolean isNoCashSent() {
+        return noCashSent;
+    }
 
-        parameters.add(clientIdHandle, EncodingHelpers.encodeInt(clientId));
-        parameters.add(transactionSucceedHandle, EncodingHelpers.encodeBoolean(transactionSucceed));
-
-        LogicalTime time = convertTime(fedamb.federateTime + fedamb.federateLookahead);
-        log("CashMachineFederate: sending TransactionStatus: " + transactionSucceed + ", clientId = " + clientId);
-        rtiamb.sendInteraction(interactionHandle, parameters, "tag".getBytes(), time);
+    private void setNoCashSent(boolean noCashSent) {
+        this.noCashSent = noCashSent;
     }
 
 }

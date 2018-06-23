@@ -1,135 +1,64 @@
 package hla.atm.service;
 
-
+import static hla.atm.commons.event.EventType.CASH_REFILL_REQUEST;
+import static hla.atm.commons.event.EventType.NO_CASH;
 import static hla.atm.utils.Utils.*;
 
-import hla.atm.utils.event.ExternalEvent;
+import hla.atm.commons.AbstractFederate;
 import hla.rti.*;
 import hla.rti.jlc.EncodingHelpers;
 import hla.rti.jlc.RtiFactoryFactory;
 
-import java.io.File;
-import java.net.MalformedURLException;
-import java.util.Random;
+class ServiceFederate extends AbstractFederate<ServiceAmbassador> {
 
-public class ServiceFederate {
-
-    private RTIambassador rtiamb;
-    private ServiceAmbassador fedamb;
+    ServiceFederate() throws RTIinternalError {
+        super(SERVICE_FEDERATE_NAME);
+        this.setRTIambassador(RtiFactoryFactory.getRtiFactory().createRtiAmbassador());
+        this.setFederateAmbassador(new ServiceAmbassador());
+    }
 
     void runFederate() throws RTIexception{
-        rtiamb = RtiFactoryFactory.getRtiFactory().createRtiAmbassador();
-        fedamb = new ServiceAmbassador();
-
-        tryCreateFederation();
-        tryJoinFederationAndRegisterSyncPoint();
-
-        waitForSynchronization("ServiceFederate");
-
-        rtiamb.synchronizationPointAchieved(SYNC_POINT);
-        log("ServiceFederate: achieved sync point: " + SYNC_POINT + ", waiting for federation...");
-        while(!fedamb.isReadyToRun) {
-            rtiamb.tick();
-        }
-
-        enableTimePolicy();
+        prepareFederate();
         declarePublishAndSubscribePolicy();
 
-        while (fedamb.running) {
+        while (getFederateAmbassador().isRunning()) {
             advanceTime();
-
-            for (ExternalEvent externalEvent : fedamb.getExternalEvents()) {
-                switch (externalEvent.getEventType()) {
-                    case NO_CASH:
-                        Random random = new Random();
-                        int cashToRefill = random.nextInt(20000) + 20000;
-                        sendCashRefillRequestInteraction(cashToRefill);
-                        break;
-                }
-            }
-
-            fedamb.getExternalEvents().clear();
-            rtiamb.tick();
+            processEvents();
+            getRTIambassador().tick();
         }
 
     }
 
-    private void sendCashRefillRequestInteraction(int amount) throws NameNotFound, FederateNotExecutionMember, RTIinternalError, InteractionClassNotDefined, RestoreInProgress, InteractionClassNotPublished, SaveInProgress, InvalidFederationTime, ConcurrentAccessAttempted, InteractionParameterNotDefined {
-        SuppliedParameters parameters = RtiFactoryFactory.getRtiFactory().createSuppliedParameters();
+    private void processEvents() {
+        getFederateAmbassador().getExternalEvents().forEach(externalEvent ->  {
+            switch (externalEvent.getEventType()) {
 
-        int interactionHandle = rtiamb.getInteractionClassHandle("InteractionRoot.CashRefillRequest");
-        int amountHandle = rtiamb.getParameterHandle("amount", interactionHandle);
+                case NO_CASH:
+                    int cashToRefill = generateRandomInt(20000, 25000);
+                    sendCashRefillRequestInteraction(cashToRefill);
+                    break;
+            }
+        });
+        getFederateAmbassador().getExternalEvents().clear();
+    }
 
-        parameters.add(amountHandle, EncodingHelpers.encodeInt(amount));
-
-        LogicalTime time = convertTime(fedamb.federateTime + fedamb.federateStep);
-        log("ServiceFederate: sending CashRefillRequest: " + amount);
-        rtiamb.sendInteraction(interactionHandle, parameters, "tag".getBytes(), time);
+    private void sendCashRefillRequestInteraction(int amount) {
+        try {
+            SuppliedParameters parameters = RtiFactoryFactory.getRtiFactory().createSuppliedParameters();
+            int interactionHandle = getRTIambassador().getInteractionClassHandle("InteractionRoot." + CASH_REFILL_REQUEST.name());
+            int amountHandle = getRTIambassador().getParameterHandle("amount", interactionHandle);
+            parameters.add(amountHandle, EncodingHelpers.encodeInt(amount));
+            LogicalTime time = convertTime(getFederateAmbassador().getFederateTime() + getFederateAmbassador().getFederateLookahead());
+            log(getFederateName() + ": sending " + CASH_REFILL_REQUEST.name() + " for amount: " + amount);
+            getRTIambassador().sendInteraction(interactionHandle, parameters, INT_TAG.getBytes(), time);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void declarePublishAndSubscribePolicy() throws RTIexception {
-        publishInteraction("CashRefillRequest");
-        fedamb.setNoCashInteractionHandler(subscribeInteraction("NoCash"));
-    }
-
-    private void tryJoinFederationAndRegisterSyncPoint() throws FederateAlreadyExecutionMember, FederationExecutionDoesNotExist, SaveInProgress, RestoreInProgress, RTIinternalError, ConcurrentAccessAttempted, FederateNotExecutionMember {
-        rtiamb.joinFederationExecution("ServiceFederate", "ATMFederation", fedamb);
-        log("ServiceFederate: joined Federation as ServiceFederate");
-
-        rtiamb.registerFederationSynchronizationPoint(SYNC_POINT, null);
-
-        while(!fedamb.isAnnounced) {
-            rtiamb.tick();
-        }
-    }
-
-    private void tryCreateFederation() throws CouldNotOpenFED, ErrorReadingFED, RTIinternalError,
-            ConcurrentAccessAttempted {
-        try {
-            File fom = new File("atmfederation.fed");
-            rtiamb.createFederationExecution("ATMFederation", fom.toURI().toURL());
-            log("ServiceFederate: created Federation");
-        } catch(FederationExecutionAlreadyExists exists) {
-            log("ServiceFederate: didn't create federation, it already existed");
-        } catch(MalformedURLException url) {
-            log("ServiceFederate: exception processing fom: " + url.getMessage());
-            url.printStackTrace();
-        }
-    }
-
-    private void enableTimePolicy() throws RTIexception {
-        LogicalTime currentTime = convertTime(fedamb.federateTime);
-        LogicalTimeInterval lookahead = convertInterval(fedamb.federateLookahead);
-        this.rtiamb.enableTimeRegulation(currentTime, lookahead);
-        while(!fedamb.isRegulating) {
-            rtiamb.tick();
-        }
-        this.rtiamb.enableTimeConstrained();
-        while(!fedamb.isConstrained) {
-            rtiamb.tick();
-        }
-    }
-
-    private void advanceTime() throws RTIexception {
-        fedamb.isAdvancing = true;
-        LogicalTime newTime = convertTime(fedamb.federateTime + fedamb.federateStep);
-        rtiamb.timeAdvanceRequest(newTime);
-        while (fedamb.isAdvancing) {
-            rtiamb.tick();
-        }
-    }
-
-    private void publishInteraction(String interactionName) throws RTIexception {
-        int handle = rtiamb.getInteractionClassHandle("InteractionRoot." + interactionName);
-        rtiamb.publishInteractionClass(handle);
-        log("ServiceFederate: published interaction " + interactionName + " (" + handle + ")");
-    }
-
-    private int subscribeInteraction(String interactionName) throws RTIexception {
-        int handle = rtiamb.getInteractionClassHandle("InteractionRoot." + interactionName);
-        rtiamb.subscribeInteractionClass(handle);
-        log("ServiceFederate: subscribed to interaction " + interactionName);
-        return handle;
+        publishInteraction(CASH_REFILL_REQUEST.name());
+        getFederateAmbassador().setNoCashInteractionHandler(subscribeInteraction(NO_CASH.name()));
     }
 
 }

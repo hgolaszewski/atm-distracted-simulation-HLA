@@ -1,79 +1,27 @@
 package hla.atm.gui;
 
-import static hla.atm.utils.Utils.SYNC_POINT;
+import static hla.atm.utils.Utils.GUI_AMBASSADOR_NAME;
 import static hla.atm.utils.Utils.convertTime;
 import static hla.atm.utils.Utils.log;
-import static hla.atm.utils.event.EventType.*;
+import static hla.atm.commons.event.EventType.*;
 
-import java.util.ArrayList;
-
-import hla.atm.utils.event.ExternalEvent;
+import hla.atm.commons.AbstractAmbassador;
+import hla.atm.commons.event.ExternalEvent;
 import hla.rti.ArrayIndexOutOfBounds;
 import hla.rti.EventRetractionHandle;
 import hla.rti.LogicalTime;
 import hla.rti.ReceivedInteraction;
 import hla.rti.jlc.EncodingHelpers;
-import hla.rti.jlc.NullFederateAmbassador;
 
-public class GUIAmbassador extends NullFederateAmbassador {
+class GUIAmbassador extends AbstractAmbassador {
 
-	double federateTime  = 0.0;
-	double federateLookahead = 1.0;
-	double federateStep = 2.0;
-
-	boolean isRegulating = false;
-	boolean isConstrained = false;
-	boolean isAdvancing = false;
-
-	boolean isAnnounced = false;
-	boolean isReadyToRun = false;
-
-	boolean running = true;
-
-	// Subscribed interaction handlers
 	private int clientEnteredInteractionHandler = 0;
 	private int clientLeftInteractionHandler = 0;
 	private int noCashInteractionHandler = 0;
 	private int cashRefillRequestInteractionHandler = 0;
 
-	// Received events
-	private ArrayList<ExternalEvent> externalEvents = new ArrayList<>();
-
-	public void synchronizationPointRegistrationSucceeded(String label){
-		log("GUIFederateAmbassador: successfully registered sync point: " + label);
-	}
-
-	public void announceSynchronizationPoint(String label, byte[] tag) {
-		log("GUIFederateAmbassador: synchronization point announced: " + label);
-		if(label.equals(SYNC_POINT)) {
-			this.isAnnounced = true;
-		}
-	}
-
-	public void federationSynchronized(String label) {
-		log("GUIFederateAmbassador: federation synchronized: " + label);
-		if(label.equals(SYNC_POINT)) {
-			this.isReadyToRun = true;
-		}
-	}
-
-	public void timeRegulationEnabled(LogicalTime theFederateTime) {
-		this.federateTime = convertTime(theFederateTime);
-		this.isRegulating = true;
-	}
-
-	public void timeConstrainedEnabled(LogicalTime theFederateTime) {
-		this.federateTime = convertTime(theFederateTime);
-		this.isConstrained = true;
-	}
-
-	public void timeAdvanceGrant(LogicalTime theTime) {
-		this.federateTime = convertTime(theTime);
-		this.isAdvancing = false;
-	}
-
-	public void synchronizationPointRegistrationFailed(String label) {
-		log("GUIFederateAmbassador: failed to register sync point: " + label);
+	GUIAmbassador() {
+		super(GUI_AMBASSADOR_NAME);
 	}
 
 	@Override
@@ -84,71 +32,74 @@ public class GUIAmbassador extends NullFederateAmbassador {
 	public void receiveInteraction(int interactionClass, ReceivedInteraction theInteraction, byte[] tag,
 								   LogicalTime theTime, EventRetractionHandle eventRetractionHandle) {
 
-		StringBuilder messageToLog = new StringBuilder("GUIFederateAmbassador: Interaction Received: ");
+		StringBuilder messageToLog = new StringBuilder(getAmbassadorName() + ": Interaction Received: ");
 
-		// CLIENT_ENTERED INTERACTION
-		if(interactionClass == clientEnteredInteractionHandler) {
-			try {
-   				int clientId = EncodingHelpers.decodeInt(theInteraction.getValue(0));
- 				double time =  convertTime(theTime);
-				ExternalEvent externalEvent = new ExternalEvent(CLIENT_ENTERED, time).withClientId(clientId);
-				externalEvents.add(externalEvent);
-				messageToLog.append("ClientEntered, time = ")
+		try {
+			// CLIENT_ENTERED INTERACTION
+			if(interactionClass == clientEnteredInteractionHandler) {
+				int clientId = EncodingHelpers.decodeInt(theInteraction.getValue(0));
+				double time = convertTime(theTime);
+				ExternalEvent externalEvent = new ExternalEvent(CLIENT_ENTERED, time)
+						.withClientId(clientId);
+				getExternalEvents().add(externalEvent);
+				messageToLog.append(CLIENT_ENTERED.name())
+						.append(", time = ")
 						.append(time)
 						.append(" clientId = ")
 						.append(clientId)
 						.append("\n");
-			} catch (ArrayIndexOutOfBounds ignored) {}
-			// CLIENT_LEFT INTERACTION
-		} else if (interactionClass == clientLeftInteractionHandler) {
-			try {
+				// CLIENT_LEFT INTERACTION
+			} else if (interactionClass == clientLeftInteractionHandler) {
 				int clientId = EncodingHelpers.decodeInt(theInteraction.getValue(0));
 				double time =  convertTime(theTime);
-				ExternalEvent externalEvent = new ExternalEvent(CLIENT_LEFT, time).withClientId(clientId);
-				externalEvents.add(externalEvent);
-				messageToLog.append("ClientLeft, time = ")
+				ExternalEvent externalEvent = new ExternalEvent(CLIENT_LEFT, time)
+						.withClientId(clientId);
+				getExternalEvents().add(externalEvent);
+				messageToLog.append(CLIENT_LEFT.name())
+						.append("ClientLeft, time = ")
 						.append(time)
 						.append(" clientId = ")
 						.append(clientId)
 						.append("\n");
-			} catch (ArrayIndexOutOfBounds ignored) {}
-			// NO_CASH INTERACTION
-		} else if (interactionClass == noCashInteractionHandler) {
-			double time =  convertTime(theTime);
-			ExternalEvent externalEvent = new ExternalEvent(NO_CASH, time);
-			externalEvents.add(externalEvent);
-			messageToLog.append("NoCash, time = ")
-					.append(time)
-					.append("\n");
-			// CASH_REFILL_REQUEST INTERACTION
-		} else if (interactionClass == cashRefillRequestInteractionHandler) {
-			double time =  convertTime(theTime);
-			ExternalEvent externalEvent = new ExternalEvent(CASH_REFILL_REQUEST, time);
-			externalEvents.add(externalEvent);
-			messageToLog.append("CashRefillRequest, time = ")
-					.append(time)
-					.append("\n");
+				// NO_CASH INTERACTION
+			} else if (interactionClass == noCashInteractionHandler) {
+				double time =  convertTime(theTime);
+				ExternalEvent externalEvent = new ExternalEvent(NO_CASH, time);
+				getExternalEvents().add(externalEvent);
+				messageToLog.append(NO_CASH.name())
+						.append(", time = ")
+						.append(time)
+						.append("\n");
+				// CASH_REFILL_REQUEST INTERACTION
+			} else if (interactionClass == cashRefillRequestInteractionHandler) {
+				double time =  convertTime(theTime);
+				ExternalEvent externalEvent = new ExternalEvent(CASH_REFILL_REQUEST, time);
+				getExternalEvents().add(externalEvent);
+				messageToLog.append(CASH_REFILL_REQUEST.name())
+						.append(", time = ")
+						.append(time)
+						.append("\n");
+			}
+		} catch (ArrayIndexOutOfBounds e) {
+			e.printStackTrace();
 		}
 		log(messageToLog.toString());
 	}
 
-	public ArrayList<ExternalEvent> getExternalEvents() {
-		return externalEvents;
-	}
-
-	public void setClientEnteredInteractionHandler(int clientEnteredInteractionHandler) {
+	void setClientEnteredInteractionHandler(int clientEnteredInteractionHandler) {
 		this.clientEnteredInteractionHandler = clientEnteredInteractionHandler;
 	}
 
-	public void setClientLeftInteractionHandler(int clientLeftInteractionHandler) {
+	void setClientLeftInteractionHandler(int clientLeftInteractionHandler) {
 		this.clientLeftInteractionHandler = clientLeftInteractionHandler;
 	}
 
-	public void setNoCashInteractionHandler(int noCashInteractionHandler) {
+	void setNoCashInteractionHandler(int noCashInteractionHandler) {
 		this.noCashInteractionHandler = noCashInteractionHandler;
 	}
 
-	public void setCashRefillRequestInteractionHandler(int cashRefillRequestInteractionHandler) {
+	void setCashRefillRequestInteractionHandler(int cashRefillRequestInteractionHandler) {
 		this.cashRefillRequestInteractionHandler = cashRefillRequestInteractionHandler;
 	}
+
 }
