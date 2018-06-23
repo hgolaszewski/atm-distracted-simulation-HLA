@@ -25,11 +25,6 @@ public class Utils {
 		return new DoubleTimeInterval(time);
 	}
 
-	public static double randomTime() {
-		Random random = new Random();
-		return 1 + (4 * random.nextDouble());
-	}
-
 	public static void log(String message) {
 		System.out.println(message);
 	}
